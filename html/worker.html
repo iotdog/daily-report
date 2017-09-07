@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" name="viewport" content="width=320px, user-scalable=no, initial-scale=1, maximum-scale=1">
+  <title>员工管理</title>
+  <link href="mdui/css/mdui.css" rel="stylesheet" />
+  <script type="text/javascript" src="mdui/js/mdui.js"></script>
+  <script type="text/javascript" src="jslib/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="jslib/serverapi.js"></script>
+</head>
+
+<body class="mdui-theme-primary-indigo mdui-theme-accent-blue mdui-theme-layout-light" style="overflow-x: hidden;">
+
+  <div class="mdui-textfield mdui-textfield-floating-label" style="margin-left: 20px">
+    <label class="mdui-textfield-label">员工姓名</label>
+    <input class="mdui-textfield-input" type="text" id="name" />
+  </div>
+
+  <div class="mdui-textfield mdui-textfield-floating-label" style="margin-left: 20px">
+    <label class="mdui-textfield-label">员工工号</label>
+    <input class="mdui-textfield-input" type="text" id="number" />
+  </div>
+
+  <div class="mdui-textfield mdui-textfield-floating-label" style="margin-left: 20px">
+    <label class="mdui-textfield-label">部门名称</label>
+    <input class="mdui-textfield-input" type="text" id="department" />
+  </div>
+
+  <div class="mdui-textfield mdui-textfield-floating-label" style="margin-left: 20px">
+    <label class="mdui-textfield-label">小组名称</label>
+    <input class="mdui-textfield-input" type="text" id="group" />
+  </div>
+
+  <button class="mdui-btn mdui-color-theme-accent mdui-ripple" id="add">添加</button>
+
+  <script>
+    $(document).ready(function() {
+      function req_callback(rsp) {
+        console.log(rsp)
+        if (rsp == "error") {
+          mdui.alert("请求失败")
+        } else {
+          mdui.alert(rsp["message"])
+        }
+      }
+      $("#add").click(function() {
+        check_online($("#mac").val(), check_callback)
+        add_worker($("#name").val(), $("#number").val(), $("#department").val(), $("#group").val(), req_callback)
+      });
+    })
+  </script>
+</body>
+
+</html>
