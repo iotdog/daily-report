@@ -26,3 +26,14 @@ function add_worker(worker_name, worker_num, dept, group, callback) {
   }
   send_request(req_url, request_body, callback)
 }
+
+function submit_report(worker_name, mainline, subline, plan, callback) {
+  var req_url = "http://localhost:1024/api/1.0/submit_report"
+  var request_body = {
+    "name": worker_name,
+    "mainLine": mainline,
+    "subLine": subline,
+    "plan": plan,
+  }
+  send_request(req_url, request_body, callback)
+}

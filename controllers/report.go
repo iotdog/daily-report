@@ -6,18 +6,21 @@ import (
 
 	"github.com/iotdog/daily-report/models"
 	"github.com/iotdog/daily-report/utils"
+	"github.com/leesper/holmes"
 )
 
 func SubmitReport(w http.ResponseWriter, r *http.Request) {
 	input := models.SubmitReportParams{}
-	err := json.NewDecoder(r.Body).Decode(input)
+	holmes.Infoln("IP address: ", r.RemoteAddr)
+	err := json.NewDecoder(r.Body).Decode(&input)
 	if err != nil {
+		holmes.Errorln(err)
 		utils.Jsonify(w, models.CommonResponse{
 			Code: 1,
 			Msg:  "读取上传数据失败",
 		})
 	} else {
-		rsp := models.SubmitReport(input)
+		rsp := models.SubmitReport(input, r.RemoteAddr)
 		utils.Jsonify(w, rsp)
 	}
 }

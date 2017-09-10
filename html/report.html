@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" name="viewport" content="width=320px, user-scalable=no, initial-scale=1, maximum-scale=1">
+  <title>提交日报</title>
+  <link href="3td_party/css/mdui.css" rel="stylesheet" />
+  <script type="text/javascript" src="3td_party/js/mdui.js"></script>
+  <script type="text/javascript" src="3td_party/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="jslib/serverapi.js"></script>
+</head>
+
+<body class="mdui-theme-primary-indigo mdui-theme-accent-blue mdui-theme-layout-light" style="overflow-x: hidden;">
+
+  <div class="mdui-typo-display-3" style="margin-left: 20px">日报内容</div>
+  <div class="mdui-textfield mdui-textfield-floating-label" style="margin-left: 20px">
+    <label class="mdui-textfield-label">姓名</label>
+    <input class="mdui-textfield-input" type="text" id="name" />
+  </div>
+
+  <p>
+  </p>
+  <div class="mdui-typo-display-1" style="margin-left: 20px">主要工作</div>
+
+  <div class="mdui-container">
+    <div class="mdui-chip">
+      <span class="mdui-chip-icon mdui-color-blue"><i class="mdui-icon material-icons">favorite</i></span>
+      <span class="mdui-chip-title">主要工作指周计划中安排的工作</span>
+    </div>
+
+    <div class="mdui-textfield mdui-textfield-floating-label">
+      <label class="mdui-textfield-label">工作内容1</label>
+      <input class="mdui-textfield-input" type="text" id="mainline1" />
+    </div>
+
+    <div class="mdui-textfield mdui-textfield-floating-label">
+      <label class="mdui-textfield-label">工作内容2</label>
+      <input class="mdui-textfield-input" type="text" id="mainline2" />
+    </div>
+
+    <div class="mdui-textfield mdui-textfield-floating-label">
+      <label class="mdui-textfield-label">工作内容3</label>
+      <input class="mdui-textfield-input" type="text" id="mainline3" />
+    </div>
+  </div>
+
+  <p>
+  </p>
+  <div class="mdui-typo-display-1" style="margin-left: 20px">次要工作</div>
+
+  <div class="mdui-container">
+    <div class="mdui-chip">
+      <span class="mdui-chip-icon mdui-color-blue"><i class="mdui-icon material-icons">favorite</i></span>
+      <span class="mdui-chip-title">次要工作指周计划中未安排的工作</span>
+    </div>
+
+    <div class="mdui-textfield mdui-textfield-floating-label">
+      <label class="mdui-textfield-label">工作内容1</label>
+      <input class="mdui-textfield-input" type="text" id="subline1" />
+    </div>
+
+    <div class="mdui-textfield mdui-textfield-floating-label">
+      <label class="mdui-textfield-label">工作内容2</label>
+      <input class="mdui-textfield-input" type="text" id="subline2" />
+    </div>
+
+    <div class="mdui-textfield mdui-textfield-floating-label">
+      <label class="mdui-textfield-label">工作内容3</label>
+      <input class="mdui-textfield-input" type="text" id="subline3" />
+    </div>
+  </div>
+
+  <p>
+  </p>
+  <div class="mdui-typo-display-1" style="margin-left: 20px">明日计划</div>
+  <div class="mdui-container">
+    <div class="mdui-chip">
+      <span class="mdui-chip-icon mdui-color-blue"><i class="mdui-icon material-icons">favorite</i></span>
+      <span class="mdui-chip-title">除周五外，每天必须提交明日计划</span>
+    </div>
+
+    <div class="mdui-textfield mdui-textfield-floating-label">
+      <label class="mdui-textfield-label">计划1</label>
+      <input class="mdui-textfield-input" type="text" id="plan1" />
+    </div>
+
+    <div class="mdui-textfield mdui-textfield-floating-label">
+      <label class="mdui-textfield-label">计划2</label>
+      <input class="mdui-textfield-input" type="text" id="plan2" />
+    </div>
+
+    <div class="mdui-textfield mdui-textfield-floating-label">
+      <label class="mdui-textfield-label">计划3</label>
+      <input class="mdui-textfield-input" type="text" id="plan3" />
+    </div>
+  </div>
+
+  <div class="mdui-fab-wrapper" mdui-fab>
+    <button class="mdui-fab mdui-ripple mdui-color-theme-accent" id="submit">
+        <i class="mdui-icon material-icons">check</i>
+        <i class="mdui-icon mdui-fab-opened material-icons">check</i>
+      </button>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      function req_callback(rsp) {
+        console.log(rsp)
+        if (rsp == "error") {
+          mdui.alert("请求失败")
+        } else {
+          mdui.alert(rsp["message"])
+        }
+      }
+      $("#submit").click(function() {
+        console.log("test")
+        var worker_name = $("#name").val()
+        var mainline = []
+        if ($("#mainline1").val() != "") {
+          mainline[mainline.length] = $("#mainline1").val()
+        }
+        if ($("#mainline2").val() != "") {
+          mainline[mainline.length] = $("#mainline2").val()
+        }
+        if ($("#mainline3").val() != "") {
+          mainline[mainline.length] = $("#mainline3").val()
+        }
+        var subline = []
+        if ($("#subline1").val() != "") {
+          subline[subline.length] = $("#subline1").val()
+        }
+        if ($("#subline2").val() != "") {
+          subline[subline.length] = $("#subline2").val()
+        }
+        if ($("#subline3").val() != "") {
+          subline[subline.length] = $("#subline3").val()
+        }
+        var plan = []
+        if ($("#plan1").val() != "") {
+          plan[plan.length] = $("#plan1").val()
+        }
+        if ($("#plan2").val() != "") {
+          plan[plan.length] = $("#plan2").val()
+        }
+        if ($("#plan3").val() != "") {
+          plan[plan.length] = $("#plan3").val()
+        }
+        submit_report(worker_name, mainline, subline, plan, req_callback)
+      });
+    })
+  </script>
+</body>
+
+</html>
