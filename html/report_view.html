@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" name="viewport" content="width=320px, user-scalable=no, initial-scale=1, maximum-scale=1">
+  <title>日报查看</title>
+  <link href="3td_party/css/mdui.css" rel="stylesheet" />
+  <script type="text/javascript" src="3td_party/js/mdui.js"></script>
+  <script type="text/javascript" src="3td_party/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="jslib/serverapi.js"></script>
+</head>
+
+<body class="mdui-theme-primary-indigo mdui-theme-accent-blue mdui-theme-layout-light" style="overflow-x: hidden;">
+
+  <div class="mdui-panel" mdui-panel id="app_container"></div>
+
+  <script>
+    $(document).ready(function() {
+      function req_callback(rsp) {
+        console.log(rsp)
+        if (rsp == "error") {
+          mdui.alert("请求失败")
+        } else {
+          // mdui.alert(rsp["message"])
+          if (0 == rsp["code"]) {
+            console.log("处理返回数据")
+            reports = rsp["reports"]
+            for (i = 0; i < reports.length; i++) {
+              var app_containers = $('<div class="mdui-panel-item mdui-panel-item-open"></div>');
+              var app_header = $('<div class="mdui-panel-item-header" style="color: #22a0d6;border-bottom:1px solid #daddde;border-top:1px solid #daddde;">应用名</div>');
+              var app_content = $('<div class="mdui-panel-item-body"></div>');
+              $("#app_container").append(app_containers);
+              app_containers.append(app_header);
+              app_containers.append(app_content);
+              app_content.append("<div>" + "<div class='applist'>工作内容：</div>" + reports[i].tasks + "</div>");
+              app_content.append("<div>" + "<div class='applist'>明日计划：</div>" + reports[i].plans + "</div>");
+              app_content.append("<div>" + "<div class='applist'>报告时间：</div>" + reports[i].reportTime + "</div>");
+
+              app_header.html(reports[i].workerName);
+            }
+          }
+        }
+      }
+      get_daily_report(req_callback)
+    })
+  </script>
+</body>
+
+</html>

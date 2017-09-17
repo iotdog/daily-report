@@ -14,6 +14,7 @@ type Worker struct {
 	WorkerName string    `bson:"workerName"` // 员工姓名
 	Department string    `bson:"department"` // 部门名称
 	Group      string    `bson:"group"`      // 小组名称
+	Leave      bool      `bson:"leave"`      // 是否离职：离职（true）、在职（false）
 	CreatedAt  time.Time `bson:"createdAt"`
 }
 
@@ -45,6 +46,7 @@ func AddWorker(input AddWorkerParams) interface{} {
 	worker.Group = input.Group
 	worker.WorkerID = input.Num
 	worker.WorkerName = input.Name
+	worker.Leave = false
 	err = worker.Insert()
 	if err != nil {
 		return &CommonResponse{

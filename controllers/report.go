@@ -24,3 +24,8 @@ func SubmitReport(w http.ResponseWriter, r *http.Request) {
 		utils.Jsonify(w, rsp)
 	}
 }
+
+func GetDailyReport(w http.ResponseWriter, r *http.Request) {
+	rsp := models.GetDailyReport()
+	utils.Jsonify(w, rsp)
+}
