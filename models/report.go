@@ -199,6 +199,7 @@ func sendDailyReportMail(reportTable, sender string, toList, ccList []string) er
 	d.SSL = configs.Instance().MailBoxSSL
 
 	err := d.DialAndSend(m)
+	DailyReportSent = true
 	holmes.Errorln(err)
 
 	return err

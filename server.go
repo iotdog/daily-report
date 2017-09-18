@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/iotdog/daily-report/configs"
 
@@ -21,6 +22,32 @@ func main() {
 		panic(err)
 	}
 	defer models.MongoCli.Close()
+
+	go func() {
+		// ticker := time.Tick(15 * time.Minute)
+		ticker := time.Tick(15 * time.Second) // test
+		now := time.Now()
+		for {
+			holmes.Infoln("running check at ", now)
+			if models.DailyReportSent {
+				holmes.Infoln("工作纪要已发送")
+			} else {
+				holmes.Infoln("工作纪要未发送")
+			}
+			holmes.Debugln("curr hour: ", now.Hour())
+			if now.Hour() > 1 && now.Hour() < 8 {
+				holmes.Infoln("reset state")
+				models.DailyReportSent = false
+			}
+			if now.Hour() >= 23 {
+				if !models.DailyReportSent {
+					models.DailyReportSent = true
+					holmes.Infoln("send daily report email")
+				}
+			}
+			now = <-ticker
+		}
+	}()
 
 	router := routers.InitRoutes()
 	n := negroni.New()

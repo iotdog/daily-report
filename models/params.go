@@ -1,5 +1,9 @@
 package models
 
+var (
+	DailyReportSent = false
+)
+
 type AddWorkerParams struct {
 	Name  string `json:"name" description:"员工姓名"`
 	Num   string `json:"number" description:"员工编号"`
