@@ -5,6 +5,7 @@ type AddWorkerParams struct {
 	Num   string `json:"number" description:"员工编号"`
 	Dept  string `json:"dept" description:"部门名称"`
 	Group string `json:"group" description:"小组名称"`
+	Email string `json:"email" description:"员工邮箱"`
 }
 
 type SubmitReportParams struct {

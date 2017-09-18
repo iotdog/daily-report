@@ -2,6 +2,7 @@ package models
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strings"
 	"time"
@@ -106,6 +107,8 @@ func SubmitReport(input SubmitReportParams, ip string) interface{} {
 		}
 	}
 
+	GetDailyReport()
+
 	return &CommonResponse{
 		Code: 0,
 		Msg:  "提交成功",
@@ -179,11 +182,17 @@ func genHtmlTable(reports []DailyReport, workers []Worker) string {
 	return html
 }
 
-func sendDailyReportMail(reportTable string) error {
+func sendDailyReportMail(reportTable, sender string, toList, ccList []string) error {
+	if 0 == len(toList) || "" == sender {
+		return errors.New("invalid email")
+	}
 	m := gomail.NewMessage()
-	m.SetHeader("From", "")
-	m.SetHeader("To", "", "")
-	m.SetHeader("Subject", fmt.Sprintf("工作纪要%d.%d.%d", time.Now().Year(), time.Now().Month(), time.Now().Day()))
+	m.SetHeader("From", sender)
+	m.SetHeader("To", toList...)
+	if len(ccList) > 0 {
+		m.SetHeader("Cc", ccList...)
+	}
+	m.SetHeader("Subject", fmt.Sprintf("研发工作纪要%d.%d.%d", time.Now().Year(), time.Now().Month(), time.Now().Day()))
 	m.SetBody("text/html", reportTable)
 	d := gomail.NewDialer(configs.Instance().MailBoxSMTP, configs.Instance().MailBoxPort,
 		configs.Instance().MailBoxUserName, configs.Instance().MailBoxPwd)
@@ -235,9 +244,13 @@ func GetDailyReport() interface{} {
 		reportInfos = append(reportInfos, *reportInfo)
 	}
 
-	genHtmlTable(reports, workers)
 	if getAllReports { // send daily report email if all workers have submitted their reports
-		sendDailyReportMail(genHtmlTable(reports, workers))
+		toList := []string{}
+		for _, worker := range workers {
+			toList = append(toList, worker.Email)
+		}
+		ccList := []string{}
+		sendDailyReportMail(genHtmlTable(reports, workers), configs.Instance().MailBoxUserName, toList, ccList)
 	} else {
 		holmes.Infoln("somebody does not submit his report")
 	}

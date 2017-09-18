@@ -35,11 +35,12 @@ function send_get_request(req_url, callback) {
 
 var BASE_URL = "http://localhost:1024"
 
-function add_worker(worker_name, worker_num, dept, group, callback) {
+function add_worker(worker_name, worker_num, email, dept, group, callback) {
   var req_url = BASE_URL + "/api/1.0/add_worker"
   var request_body = {
     "name": worker_name,
     "number": worker_num,
+    "email": email,
     "dept": dept,
     "group": group,
   }

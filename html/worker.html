@@ -23,6 +23,11 @@
   </div>
 
   <div class="mdui-textfield mdui-textfield-floating-label" style="margin-left: 20px">
+    <label class="mdui-textfield-label">员工邮箱</label>
+    <input class="mdui-textfield-input" type="text" id="email" />
+  </div>
+
+  <div class="mdui-textfield mdui-textfield-floating-label" style="margin-left: 20px">
     <label class="mdui-textfield-label">部门名称</label>
     <input class="mdui-textfield-input" type="text" id="department" />
   </div>
@@ -45,7 +50,7 @@
         }
       }
       $("#add").click(function() {
-        add_worker($("#name").val(), $("#number").val(), $("#department").val(), $("#group").val(), req_callback)
+        add_worker($("#name").val(), $("#number").val(), $("#email").val(), $("#department").val(), $("#group").val(), req_callback)
       });
     })
   </script>
