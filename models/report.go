@@ -205,6 +205,20 @@ func sendDailyReportMail(reportTable, sender string, toList, ccList []string) er
 	return err
 }
 
+// SendDailyReportMail send daily report email even somebody still does not submit his report
+func SendDailyReportMail() {
+	reports := getTodayReports()
+	workers := getWorkers()
+	if len(reports) > 0 && len(workers) > 0 {
+		toList := []string{}
+		for _, worker := range workers {
+			toList = append(toList, worker.Email)
+		}
+		ccList := []string{}
+		sendDailyReportMail(genHtmlTable(reports, workers), configs.Instance().MailBoxUserName, toList, ccList)
+	}
+}
+
 func GetDailyReport() interface{} {
 	reportInfos := []ReportInfo{}
 	reports := getTodayReports()
