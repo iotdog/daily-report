@@ -33,8 +33,10 @@ function send_get_request(req_url, callback) {
   })
 }
 
+var BASE_URL = "http://localhost:1024"
+
 function add_worker(worker_name, worker_num, dept, group, callback) {
-  var req_url = "http://localhost:1024/api/1.0/add_worker"
+  var req_url = BASE_URL + "/api/1.0/add_worker"
   var request_body = {
     "name": worker_name,
     "number": worker_num,
@@ -45,7 +47,7 @@ function add_worker(worker_name, worker_num, dept, group, callback) {
 }
 
 function submit_report(worker_name, mainline, subline, plan, callback) {
-  var req_url = "http://localhost:1024/api/1.0/submit_report"
+  var req_url = BASE_URL + "/api/1.0/submit_report"
   var request_body = {
     "name": worker_name,
     "mainLine": mainline,
@@ -56,6 +58,6 @@ function submit_report(worker_name, mainline, subline, plan, callback) {
 }
 
 function get_daily_report(callback) {
-  var req_url = "http://localhost:1024/api/1.0/get_daily_report"
+  var req_url = BASE_URL + "/api/1.0/get_daily_report"
   send_get_request(req_url, callback)
 }
