@@ -173,8 +173,8 @@ func genHtmlTable(reports []DailyReport, workers []Worker) string {
 		return ""
 	}
 
-	_, html := j2t.JSON2HtmlTable(string(tmp), []string{"姓名", "部门", "小组",
-		"工作内容", "明日计划", "报告时间"})
+	_, html := j2t.JSON2HtmlTable(string(tmp), []string{"部门", "小组", "姓名",
+		"工作内容", "明日计划", "报告时间"}, []string{"部门", "小组", "姓名"})
 	holmes.Infoln(html)
 	return html
 }
