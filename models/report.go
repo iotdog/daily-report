@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strconv"
 	"strings"
 	"time"
 
@@ -115,9 +116,9 @@ func SubmitReport(input SubmitReportParams, ip string) interface{} {
 	}
 }
 
-func getTodayReports() []DailyReport {
+func getReports(year, month, day int) []DailyReport {
 	reports := []DailyReport{}
-	todayBegin := time.Date(time.Now().Year(), time.Now().Month(), time.Now().Day(), 1, 0, 0, 0, time.Local)
+	todayBegin := time.Date(year, time.Month(month), day, 1, 0, 0, 0, time.Local)
 	err := MongoCli.DB(configs.Instance().DBName).C(configs.Instance().DailyReportC).Find(
 		bson.M{"updatedAt": bson.M{
 			"$gt": todayBegin,
@@ -207,7 +208,7 @@ func sendDailyReportMail(reportTable, sender string, toList, ccList []string) er
 
 // SendDailyReportMail send daily report email even somebody still does not submit his report
 func SendDailyReportMail() {
-	reports := getTodayReports()
+	reports := getReports(time.Now().Year(), int(time.Now().Month()), time.Now().Day())
 	workers := getWorkers()
 	if len(reports) > 0 && len(workers) > 0 {
 		toList := []string{}
@@ -221,7 +222,7 @@ func SendDailyReportMail() {
 
 func GetDailyReport() interface{} {
 	reportInfos := []ReportInfo{}
-	reports := getTodayReports()
+	reports := getReports(time.Now().Year(), int(time.Now().Month()), time.Now().Day())
 	if 0 == len(reports) {
 		return DailyReportResp{
 			&CommonResponse{
@@ -276,5 +277,46 @@ func GetDailyReport() interface{} {
 			Msg:  "请求成功",
 		},
 		reportInfos,
+	}
+}
+
+func SendReport4Date(input SendDailyReportParams) interface{} {
+	year, err := strconv.Atoi(input.Year)
+	if err != nil {
+		return CommonResponse{
+			Code: 1,
+			Msg:  "invalid year",
+		}
+	}
+	month, err := strconv.Atoi(input.Month)
+	if err != nil {
+		return CommonResponse{
+			Code: 1,
+			Msg:  "invalid month",
+		}
+	}
+	day, err := strconv.Atoi(input.Day)
+	if err != nil {
+		return CommonResponse{
+			Code: 1,
+			Msg:  "invalid day",
+		}
+	}
+
+	reports := getReports(year, month, day)
+	holmes.Infof("%#v", reports)
+	workers := getWorkers()
+	if len(reports) > 0 && len(workers) > 0 {
+		toList := []string{}
+		for _, worker := range workers {
+			toList = append(toList, worker.Email)
+		}
+		ccList := []string{}
+		holmes.Infoln(ccList)
+		// sendDailyReportMail(genHtmlTable(reports, workers), configs.Instance().MailBoxUserName, toList, ccList)
+	}
+	return CommonResponse{
+		Code: 0,
+		Msg:  "请求成功",
 	}
 }

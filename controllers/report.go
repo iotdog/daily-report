@@ -29,3 +29,18 @@ func GetDailyReport(w http.ResponseWriter, r *http.Request) {
 	rsp := models.GetDailyReport()
 	utils.Jsonify(w, rsp)
 }
+
+func SendDailyReport4Date(w http.ResponseWriter, r *http.Request) {
+	input := models.SendDailyReportParams{}
+	err := json.NewDecoder(r.Body).Decode(&input)
+	if err != nil {
+		holmes.Errorln(err)
+		utils.Jsonify(w, models.CommonResponse{
+			Code: 1,
+			Msg:  "读取上传数据失败",
+		})
+	} else {
+		rsp := models.SendReport4Date(input)
+		utils.Jsonify(w, rsp)
+	}
+}

@@ -22,8 +22,8 @@ func Instance() *Configs {
 	if configs == nil {
 		configs = new(Configs)
 		configs.ListenPort = 1024
-		configs.MongoDBAddr = "mongodb://192.168.1.236:27000"
-		// configs.MongoDBAddr = "mongodb://127.0.0.1:27017"
+		// configs.MongoDBAddr = "mongodb://192.168.1.236:27000"
+		configs.MongoDBAddr = "mongodb://127.0.0.1:27017"
 		configs.DBName = "main"
 		configs.WorkerC = "workers"
 		configs.DailyReportC = "daily_reports"

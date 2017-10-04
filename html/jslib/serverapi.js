@@ -62,3 +62,13 @@ function get_daily_report(callback) {
   var req_url = BASE_URL + "/api/1.0/get_daily_report"
   send_get_request(req_url, callback)
 }
+
+function send_report_for_date(callback) {
+  var req_url = BASE_URL + "/api/1.0/send_report_for_date"
+  var request_body = {
+    "year": "2017",
+    "month": "a",
+    "day": "10",
+  }
+  send_post_request(req_url, request_body, callback)
+}

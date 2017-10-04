@@ -41,8 +41,8 @@ func main() {
 			}
 			if now.Hour() >= 23 {
 				if !models.DailyReportSent {
-					models.DailyReportSent = true
 					holmes.Infoln("send daily report email")
+					models.SendDailyReportMail()
 				}
 			}
 			now = <-ticker

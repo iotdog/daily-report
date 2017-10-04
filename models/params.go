@@ -18,3 +18,9 @@ type SubmitReportParams struct {
 	SubLine    []string `json:"subLine" description:"支线任务"`
 	Plan       []string `json:"plan" description:"下一步计划"`
 }
+
+type SendDailyReportParams struct {
+	Year  string `json:"year" description:"年份"`
+	Month string `json:"month" description:"月份"`
+	Day   string `json:"day" description:"日期"`
+}
