@@ -40,7 +40,8 @@ func main() {
 				models.DailyReportSent = false
 			}
 			if now.Hour() >= 23 {
-				if !models.DailyReportSent {
+				weekDay := time.Now().Weekday()
+				if !models.DailyReportSent && weekDay != 6 && weekDay != 7 {
 					holmes.Infoln("send daily report email")
 					models.SendDailyReportMail()
 				}

@@ -108,8 +108,6 @@ func SubmitReport(input SubmitReportParams, ip string) interface{} {
 		}
 	}
 
-	GetDailyReport()
-
 	return &CommonResponse{
 		Code: 0,
 		Msg:  "提交成功",
@@ -260,14 +258,7 @@ func GetDailyReport() interface{} {
 		reportInfos = append(reportInfos, *reportInfo)
 	}
 
-	if getAllReports { // send daily report email if all workers have submitted their reports
-		toList := []string{}
-		for _, worker := range workers {
-			toList = append(toList, worker.Email)
-		}
-		ccList := []string{}
-		sendDailyReportMail(genHtmlTable(reports, workers), configs.Instance().MailBoxUserName, toList, ccList)
-	} else {
+	if !getAllReports {
 		holmes.Infoln("somebody does not submit his report")
 	}
 
